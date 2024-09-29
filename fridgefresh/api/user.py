@@ -58,8 +58,7 @@ def add_user():
     )
     user = cur.fetchone()
     if user:
-        return jsonify({}, 409)
-    
+        return jsonify({}, 409)  
     salt = uuid.uuid4().hex
     hash_obj = hashlib.new('sha512')
     password_salted = salt + password

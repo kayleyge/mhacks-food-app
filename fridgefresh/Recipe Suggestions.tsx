@@ -5,11 +5,13 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { ChefHatIcon, BookOpenIcon } from "lucide-react"
 
+
 interface Recipe {
   name: string
   ingredients: string[]
   instructions: string[]
 }
+
 
 export default function RecipeSuggestions() {
   const [recipes, setRecipes] = useState<Recipe[]>([])
