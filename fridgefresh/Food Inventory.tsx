@@ -65,7 +65,62 @@ export default function FoodInventory() {
       expiryDate
     })
   }
+  // Got this from asking GPT how to connect front to backend
+  const fetchFoodItems = async () => {
+    try {
+      const response = await fetch(`/api/v1/food/${username}/`)
+      const data = await response.json()
+      setFoodItems(data)
+    } catch (error) {
+      console.error("Error fetching food items:", error)
+    }
+  }
+  const addFoodItemToBackend = async (item: Omit<FoodItem, 'id'>) => {
+    try {
+      const response = await fetch(`/api/v1/food/${username}/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(item)
+      })
+      const newItem = await response.json()
+      setFoodItems([...foodItems, newItem])
+    } catch (error) {
+      console.error("Error adding food item:", error)
+    }
+  }
 
+  const updateFoodItemInBackend = async (item: FoodItem) => {
+    try {
+      const response = await fetch(`/api/v1/food/${username}/${item.id}/`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(item)
+      })
+      const updatedItem = await response.json()
+      setFoodItems(foodItems.map(food => food.id === updatedItem.id ? updatedItem : food))
+    } catch (error) {
+      console.error("Error updating food item:", error)
+    }
+  }
+
+  const deleteFoodItemFromBackend = async (id: string) => {
+    try {
+      await fetch(`/api/v1/food/${username}/${id}/`, {
+        method: 'DELETE'
+      })
+      setFoodItems(foodItems.filter(item => item.id !== id))
+    } catch (error) {
+      console.error("Error deleting food item:", error)
+    }
+  }
+
+  //END OF CODE BLOCKS THAT CONNECT TO BACK END
+
+  
   const addFoodItem = (item: Omit<FoodItem, 'id'>) => {
     const newItem = { ...item, id: Date.now().toString() }
     setFoodItems([...foodItems, newItem])
