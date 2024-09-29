@@ -12,6 +12,35 @@ interface Recipe {
   instructions: string[]
 }
 
+/*
+export default function RecipeSuggestions() {
+  const [recipes, setRecipes] = useState<Recipe[]>([])
+
+  const generateRecipes = async () => {
+    try {
+      const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer YOUR_OPENAI_API_KEY`, // Replace with your OpenAI API key
+        },
+        body: JSON.stringify({
+          model: "gpt-4", // You can use "gpt-3.5-turbo" if preferred
+          messages: [
+            {
+              role: "system",
+              content: "You are a helpful recipe suggestion assistant."
+            },
+            {
+              role: "user",
+              content: "Suggest recipes using apples, oats, and cinnamon."
+            }
+          ],
+          max_tokens: 500
+        }),
+      });
+*/
+
 
 export default function RecipeSuggestions() {
   const [recipes, setRecipes] = useState<Recipe[]>([])

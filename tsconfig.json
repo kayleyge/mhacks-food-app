@@ -1,9 +1,23 @@
 {
     "compilerOptions": {
-      "baseUrl": ".",
+      "target": "es5",  
+      "lib": ["es2015", "dom"],                        // or "es6" depending on your environment
+      "module": "esnext",
+      "jsx": "react-jsx",                       // Supports JSX in React
+      "esModuleInterop": true,                  // Enables interoperability between CommonJS and ES Modules
+      "moduleResolution": "node",
+      "skipLibCheck": true,
+      "strict": true,
+      "baseUrl": "./",
       "paths": {
-        "@/components/*": ["src/components/*"]
+        "@/lib/*": ["fridgefresh/lib/*"],
+        "@/components/*": ["fridgefresh/components/*"] // Define path alias
       }
-    }
+    },
+    "include": ["fridgefresh/**/*"],                     // Adjust to your project structure
+    "exclude": ["node_modules"]
   }
+
+  
+
   

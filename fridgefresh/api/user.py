@@ -1,18 +1,24 @@
-from flask import jsonify, request
+from flask import Flask, jsonify, request
 import uuid
 import hashlib
-import sqlite3
+import pathlib
 import fridgefresh
 
 from inference_sdk import InferenceHTTPClient
 
+app = Flask(__name__)
 
-CLIENT = InferenceHTTPClient(
-    api_url="https://outline.roboflow.com",
-    api_key="API_KEY"
-)
-
-result = CLIENT.infer(your_image.jpg, model_id="food-detection-7xta0/1")
+@app.route('/api/v1/process', methods = ["POST"])
+def process_image():
+    file = request.files["file"]
+    stem = uuid.uuid4().hex
+    file_path = f"{stem}{pathlib.Path(file.filename).suffix.lower()}"
+    CLIENT = InferenceHTTPClient(
+        api_url="https://outline.roboflow.com",
+        api_key="API_KEY"
+    )
+    result = CLIENT.infer(file_path, model_id="food-detection-7xta0/1")
+    return result
 
 @app.route('/api/v1/users/<username>/', methods = ["GET"])
 def get_user(username):

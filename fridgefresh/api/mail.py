@@ -15,14 +15,14 @@ app.config['MAIL_USE_SSL'] = True
 mail = Mail(app) 
    
 # message object mapped to a particular URL ‘/’ 
-@app.route("/") 
-def index(): 
+@app.route("/message/") 
+def message(): 
    msg = Message( 
                 'Hello', 
                 sender ='yourId@gmail.com', 
                 recipients = ['receiver’sid@gmail.com'] 
                ) 
-   msg.body = 'Hello Flask message sent from Flask-Mail'
+   msg.body = 'Hello your food is expiring soon'
    mail.send(msg) 
    return 'Sent'
    

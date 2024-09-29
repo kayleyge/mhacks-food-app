@@ -1,6 +1,7 @@
 #@app.route('/api/v1/food/<username>/', methods = ["GET"])
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, session
 from uuid import uuid4
+import fridgefresh
 
 app = Flask(__name__)
 
@@ -23,29 +24,52 @@ def add_food_item(username):
         'manufacturingDate': data.get('manufacturingDate'),
         'expiryDate': data.get('expiryDate')
     }
-    if username not in food_inventory:
-        food_inventory[username] = []
-    food_inventory[username].append(new_food_item)
+    connection = fridgefresh.model.get_db()
+    logname = session["username"]
+    cur = connection.execute(
+        "SELECT food WHERE name = ? AND username = ? ",
+        (data.get('name'), logname )
+    )
+    food = cur.fetchone()
+    if food is not None:
+        return jsonify(food), 200
+    connection.execute(
+        "INSERT INTO food (name, owner, manufacturingDate, expiryDate VALUES (?, ?, ?, ?) ",
+        (data.get('name'), logname, data.get('manufacturingDate'), data.get('expiryDate'))
+    )
+    cur = connection.execute(
+        "SELECT foodid FROM food WHERE foodid = ?, owner = ?",
+        (data.get('name'), logname, data.get('manufacturingDate'), data.get('expiryDate'))
+    )
     return jsonify(new_food_item), 201
 
 # Route to update a food item
-@app.route('/api/v1/food/<username>/<item_id>/', methods=["PUT"])
-def update_food_item(username, item_id):
+@app.route('/api/v1/food/<username>/<foodid>/', methods=["PUT"])
+def update_food_item(username, foodid):
     data = request.json
-    user_inventory = food_inventory.get(username, [])
-    for item in user_inventory:
-        if item['id'] == item_id:
-            item['name'] = data.get('name')
-            item['manufacturingDate'] = data.get('manufacturingDate')
-            item['expiryDate'] = data.get('expiryDate')
-            return jsonify(item), 200
-    return jsonify({'error': 'Item not found'}), 404
+    
+    connection = fridgefresh.model.get_db()
+    cur = connection.execute(
+        "UPDATE food SET name = ?, manufacturingDate = ?, expiryDate = ?, "
+        "WHERE foodid = ? AND username = ?",
+        (data.get('name'), data.get('manufacturingDate'), data.get('expiryDate'), username, foodid, )
+    )
+    food = cur.fetchone()
+    if food is None:
+        return jsonify(food), 404
+    return jsonify(food), 200
 
 # Route to delete a food item
-@app.route('/api/v1/food/<username>/<item_id>/', methods=["DELETE"])
-def delete_food_item(username, item_id):
-    user_inventory = food_inventory.get(username, [])
-    food_inventory[username] = [item for item in user_inventory if item['id'] != item_id]
+@app.route('/api/v1/food/<username>/<foodid>/', methods=["DELETE"])
+def delete_food_item(foodid):
+    connection = fridgefresh.model.get_db()
+    logname = session["username"]
+
+    cur = connection.execute(
+        "DELETE FROM food WHERE foodid = ? AND username = ? ",
+        (foodid, logname, )
+    )
+    food = cur.fetchone()
     return '', 204
 
 if __name__ == "__main__":
