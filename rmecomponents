@@ -1,0 +1,44 @@
+add the necessary UI components that are typically used in a Next.js project with shadcn/ui. These components will be created in separate files within the components/ui directory.
+
+Let's create the following components:
+
+Button
+Card (including CardContent, CardDescription, CardFooter, CardHeader, CardTitle)
+Input
+Label
+Tabs (including TabsContent, TabsList, TabsTrigger)
+Dialog (including DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger)
+Here are the component files:
+
+
+
+
+
+
+
+These components are now ready to be used in your FridgeFresh app. They are styled using Tailwind CSS and follow the shadcn/ui design system.
+
+To use these components, you'll need to make sure you have the following dependencies installed:
+
+@radix-ui/react-dialog
+@radix-ui/react-label
+@radix-ui/react-slot
+@radix-ui/react-tabs
+class-variance-authority
+lucide-react
+You can install these dependencies by running:
+
+npm install @radix-ui/react-dialog @radix-ui/react-label @radix-ui/react-slot @radix-ui/react-tabs class-variance-authority lucide-react
+
+npm install @radix-ui/react-dialog @radix-ui/react-label @radix-ui/react-slot @radix-ui/react-tabs class-variance-authority lucide-react
+Also, make sure you have a utils.ts file in your lib directory with the cn function:
+
+
+This setup will allow you to use these components throughout your FridgeFresh app, providing a consistent and accessible user interface.
+
+
+Copy
+
+Retry
+
+
